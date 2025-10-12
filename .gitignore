@@ -1,1 +1,5 @@
 /AZ-104-MicrosoftAzureAdministrator-master
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
