@@ -10,15 +10,12 @@ terraform {
   }
 }
 
-# Configure the Azure Active Directory Provider
 provider "azuread" {}
 
-# Configure the Azure Resource Manager Provider
 provider "azurerm" {
   features {}
 }
 
-# Retrieve domain information
 data "azuread_domains" "default" {
   only_initial = true
 }
