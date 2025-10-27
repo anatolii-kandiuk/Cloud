@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 terraform {
   required_providers {
     azuread = {
@@ -11,6 +14,7 @@ provider "azuread" {}
 
 provider "azurerm" {
   features {}
+  subscription_id = "0a94bb51-1d14-4b35-8b2c-0f484e30888e"
 }
 
 #------------------------------------
@@ -27,9 +31,9 @@ resource "azurerm_management_group" "az104_mg1" {
 #------------------------------------------------
 
 resource "azuread_group" "helpdesk" {
-  display_name = "Help Desk"
-  description  = "Help Desk Group"
-  mail_enabled = false
+  display_name     = "Help Desk"
+  description      = "Help Desk Group"
+  mail_enabled     = false
   security_enabled = true
 }
 
@@ -45,19 +49,19 @@ resource "azurerm_role_assignment" "virtual_machine_contributor_assignment" {
 
 resource "azurerm_role_definition" "custom_support_request" {
   name        = "Custom Support Request"
-  scope       = azurerm_management_group.az104_mg1.id
+  scope       = "/subscriptions/0a94bb51-1d14-4b35-8b2c-0f484e30888e"
   description = "A custom contributor role for support requests."
 
   permissions {
     actions     = ["Microsoft.Support/*"]
-    not_actions = ["Microsoft.Support.register/action"]
+    not_actions = ["Microsoft.Support/register/action"]
   }
 
-  assignable_scopes = [azurerm_management_group.az104_mg1.id]
+  assignable_scopes = ["/subscriptions/0a94bb51-1d14-4b35-8b2c-0f484e30888e"]
 }
 
 resource "azurerm_role_assignment" "custom_support_assignment" {
-  scope              = azurerm_management_group.az104_mg1.id
+  scope              = "/subscriptions/0a94bb51-1d14-4b35-8b2c-0f484e30888e"
   role_definition_id = azurerm_role_definition.custom_support_request.role_definition_resource_id
   principal_id       = azuread_group.helpdesk.object_id
 }
